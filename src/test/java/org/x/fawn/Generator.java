@@ -20,8 +20,8 @@ public class Generator {
         FastAutoGenerator.create(dbUrl, dbUserName, dbPassword)
                 .globalConfig(builder -> {
                     builder.author(author)
-                            .enableSwagger()
-                            .outputDir(outputDir); // 指定生成代码输出目录
+                            .outputDir(outputDir) // 指定生成代码输出目录
+                            .disableOpenDir();
                 })
                 .packageConfig(builder -> {
                     builder.parent(parentPackage)
@@ -31,15 +31,15 @@ public class Generator {
                 .strategyConfig(builder -> {
                     builder.addInclude("t_user") // 设置需要生成的表名
                             .addTablePrefix("t_", "c_") // 设置过滤表前缀
-                            ;
-
-                })
-                .strategyConfig(b -> {
-                    b.entityBuilder()
+                            // entity builder
+                            .entityBuilder()
                             .enableLombok()
+                            .enableChainModel()
                             .logicDeleteColumnName("is_deleted")
                             .logicDeletePropertyName("isDeleted");
+
                 })
+
                 .templateEngine(new FreemarkerTemplateEngine())
                 .execute();
     }
